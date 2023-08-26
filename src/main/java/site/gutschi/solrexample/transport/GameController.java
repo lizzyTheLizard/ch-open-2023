@@ -10,17 +10,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.view.RedirectView;
+import site.gutschi.solrexample.connectors.SolrConnector;
 import site.gutschi.solrexample.model.Game;
 import site.gutschi.solrexample.model.GameRepository;
 
 import java.util.Collection;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
 @Slf4j
 public class GameController {
     private final GameRepository gameRepository;
+    private final SolrConnector solrConnector;
 
     @SuppressWarnings("SameReturnValue")
     @GetMapping("/games/{id}")
@@ -47,7 +48,7 @@ public class GameController {
     public String showGames(@Param("search") String search, Model model) {
         final var games = getGames(search);
         model.addAttribute("games", games);
-        model.addAttribute("search", search );
+        model.addAttribute("search", search);
         return "games";
     }
 
@@ -56,25 +57,7 @@ public class GameController {
             log.info("Get all games");
             return gameRepository.findAll();
         }
-        return List.of();
-
-        /*
-        try (SolrClient solr = new Http2SolrClient.Builder("http://localhost:8983/solr/games").build()){
-            final var solrQuery = new SolrQuery();
-            solrQuery.set("q", search);
-            solrQuery.set("fl", "id");
-            solrQuery.setRows(1000);
-            final var response = solr.query(solrQuery);
-            final var ids = response.getResults().stream()
-                    .map(s -> (String) s.getFieldValue("id"))
-                    .map(Integer::parseInt)
-                    .collect(Collectors.toList());
-            log.info("Get " + ids.size() + " games");
-            return gameRepository.findAllById(ids);
-        } catch (IOException | SolrServerException e) {
-            log.error("Could not search: " + search, e);
-            return List.of();
-        }
-         */
+        final var ids = solrConnector.search(search);
+        return gameRepository.findAllById(ids);
     }
 }

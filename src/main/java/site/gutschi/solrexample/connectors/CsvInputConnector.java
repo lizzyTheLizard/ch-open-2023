@@ -1,4 +1,4 @@
-package site.gutschi.solrexample.input;
+package site.gutschi.solrexample.connectors;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -25,7 +25,7 @@ import java.util.stream.StreamSupport;
 @RequiredArgsConstructor
 @Service
 @Slf4j
-public class CsvInputReader {
+public class CsvInputConnector {
     private static final String CLASSPATH_GAMES_CSV = "classpath:games.csv";
 
     public Collection<Game> readCsv() {
