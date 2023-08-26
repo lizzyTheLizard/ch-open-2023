@@ -1,0 +1,24 @@
+version: '2'
+
+services:
+  db:
+    image: 'postgres:15.2-alpine'
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=pwd
+  solr:
+    image: 'solr:9.2.0'
+    ports:
+      - "8983:8983"
+    command:
+      - solr-precreate
+      - games
+    volumes:
+      #- ./src/main/solr:/opt/solr/server/solr/configsets/_default/conf
+      - solr-data:/var/solr
+volumes:
+  solr-data:
+  db-data:
