@@ -1,7 +1,5 @@
 // noinspection JSUnresolvedReference,JSUnusedGlobalSymbols
 
-//file:///C:/Users/grma/IdeaProjects/ch-open-2023/src/main/resources/templates/games.html?search=sea&team=nintendo&year=2021
-
 $(function () {
     $('#decadeclose').click(function(){
         const url = new URL(document.URL);
