@@ -15,6 +15,10 @@ import site.gutschi.solrexample.model.Game;
 import site.gutschi.solrexample.model.GameRepository;
 
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -45,19 +49,18 @@ public class GameController {
 
     @SuppressWarnings("SameReturnValue")
     @GetMapping("/games")
-    public String showGames(@Param("search") String search, Model model) {
-        final var games = getGames(search);
-        model.addAttribute("games", games);
-        model.addAttribute("search", search);
+    public String showGames(@Param("query") String query, Model model) {
+        final var searchResult = solrConnector.search(Optional.ofNullable(query).orElse("*"));
+        model.addAttribute("query", query);
+        model.addAttribute("games", getGames(searchResult));
         return "games";
     }
 
-    private Collection<Game> getGames(String search) {
-        if (search == null) {
-            log.info("Get all games");
-            return gameRepository.findAll();
-        }
-        final var ids = solrConnector.search(search);
-        return gameRepository.findAllById(ids);
+    private Collection<Game> getGames(List<Integer> gameIds) {
+        final var result = gameRepository.findAllById(gameIds);
+        //findllById does not keep ordering, so reorder results
+        return result.stream()
+                .sorted(Comparator.comparingInt(g -> gameIds.indexOf(g.getId())))
+                .collect(Collectors.toList());
     }
 }
