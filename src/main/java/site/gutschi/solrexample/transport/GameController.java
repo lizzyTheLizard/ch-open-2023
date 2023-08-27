@@ -58,7 +58,7 @@ public class GameController {
 
     private Collection<Game> getGames(List<Integer> gameIds) {
         final var result = gameRepository.findAllById(gameIds);
-        //to keep the ordering by of solr, reorder the results according to the first list
+        //findllById does not keep ordering, so reorder results
         return result.stream()
                 .sorted(Comparator.comparingInt(g -> gameIds.indexOf(g.getId())))
                 .collect(Collectors.toList());
