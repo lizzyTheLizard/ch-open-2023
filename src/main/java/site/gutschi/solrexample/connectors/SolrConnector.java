@@ -36,7 +36,7 @@ public class SolrConnector {
         final var solrQuery = new SolrQuery();
         solrQuery.set("q", query);
         solrQuery.set("fl", "id");
-        solrQuery.set("df", "_text_");
+        solrQuery.set("df", "title");
         solrQuery.set("sort", "score desc");
         solrQuery.setRows(2000);
         return solrQuery;
