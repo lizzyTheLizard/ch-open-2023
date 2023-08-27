@@ -17,7 +17,6 @@ services:
       - solr-precreate
       - games
     volumes:
-      #- ./src/main/solr:/opt/solr/server/solr/configsets/_default/conf
       - solr-data:/var/solr
 volumes:
   solr-data:
