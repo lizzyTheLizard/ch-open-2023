@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+    Basically the default configuration file. Changes
+    * Remove schemaless mode
+    * Remove autocommit
+    * Remove highlighting
+
+     For more details about configurations options that may appear in
+     this file, see https://solr.apache.org/guide/solr/latest/configuration-guide/configuring-solrconfig-xml.html.
+-->
+<config>
+    <luceneMatchVersion>9.4</luceneMatchVersion>
+
+    <updateHandler class="solr.DirectUpdateHandler2">
+        <updateLog>
+            <str name="dir">${solr.ulog.dir:}</str>
+        </updateLog>
+    </updateHandler>
+
+    <!-- Primary search handler, expected by most clients, examples and UI frameworks -->
+    <requestHandler name="/select" class="solr.SearchHandler">
+        <lst name="defaults">
+            <str name="echoParams">explicit</str>
+            <int name="rows">10</int>
+        </lst>
+    </requestHandler>
+
+    <!-- A request handler that returns indented JSON by default -->
+    <requestHandler name="/query" class="solr.SearchHandler">
+        <lst name="defaults">
+            <str name="echoParams">explicit</str>
+            <str name="wt">json</str>
+            <str name="indent">true</str>
+        </lst>
+    </requestHandler>
+
+    <!-- Shared parameters for multiple Request Handlers -->
+    <initParams path="/update/**,/query,/select">
+        <lst name="defaults">
+            <str name="df">_text_</str>
+        </lst>
+    </initParams>
+</config>

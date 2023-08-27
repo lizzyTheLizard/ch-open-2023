@@ -35,6 +35,39 @@
         <div class="container">
             <h1 class="mt-5" th:text="${search == null ? 'All Games' : ('Searched by &quot;' + search + '&quot;')}">All
                 Games</h1>
+            <div class="row" style="margin-bottom: 20px">
+                <div th:if="${decade == null}" class="col-sm-4">
+                    <select  class="form-select" aria-label="year select" id="decadeselect">
+                        <option selected disabled hidden style='display: none' value=''>Select a Release Decade</option>
+                        <option th:each="instance : ${decades}" th:value="${instance.key}" th:text="${instance.key + ' (' + instance.value + ')'}" value="2020">2020 (3)</option>
+                    </select>
+                </div>
+                <div th:if="${decade != null}" class="col-sm-4">
+                    <span th:text="${'Decade: ' + decade}">Decade: 2020</span>
+                    <button type="button" class="btn-close" aria-label="Close" id="decadeclose"></button>
+                </div>
+                <div th:if="${team == null}" class="col-sm-4">
+                    <select class="form-select" aria-label="team select" id="teamselect">
+                        <option selected disabled hidden style='display: none' value=''>Select a Developer Team</option>
+                        <option th:each="instance : ${teams}" th:value="${instance.key}" th:text="${instance.key + ' (' + instance.value + ')'}" value="Nintendo">Nintendo (3)</option>
+                    </select>
+                </div>
+                <div th:if="${team != null}" class="col-sm-4">
+                    <span th:text="${'Team: ' + team}">Team: Nintendo</span>
+                    <button type="button" class="btn-close" aria-label="Close" id="teamclose"></button>
+                </div>
+                <div th:if="${genre == null}" class="col-sm-4">
+                    <select class="form-select" aria-label="team select" id="genreselect">
+                        <option selected disabled hidden style='display: none' value=''>Select a Genre</option>
+                        <option th:each="instance : ${genres}" th:value="${instance.key}" th:text="${instance.key + ' (' + instance.value + ')'}" value="Adventure">Adventure (3)</option>
+                    </select>
+                </div>
+                <div th:if="${genre != null}" class="col-sm-4">
+                    <span th:text="${'Genre: ' + genre}">Genre: Adventure</span>
+                    <button type="button" class="btn-close" aria-label="Close" id="genreclose"></button>
+                </div>
+            </div>
+
             <table class="table table-striped" data-pagination="true" id="searchResults">
                 <thead>
                 <tr>
@@ -62,6 +95,6 @@
             integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
             src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/bootstrap-table@1.21.4/dist/bootstrap-table.min.js"></script>
-    <script src="/allGamesTable.js"></script>
+    <script th:src="${'/games.js'}" src="../static/games.js"></script>
 </body>
 </html>

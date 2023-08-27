@@ -1,0 +1,73 @@
+<schema name="default-config" version="1.6">
+    <field name="id"              type="string"    indexed="true"  stored="true"  required="true"  multiValued="false" />
+    <field name="_version_"       type="plong"     indexed="false" stored="false" required="false" multiValued="false" />
+    <field name="title"           type="text_sort" indexed="true"  stored="true"  required="true"  multiValued="false" />
+    <field name="team"            type="string"    indexed="true"  stored="true"  required="false" multiValued="true"  />
+    <field name="genre"           type="string"    indexed="true"  stored="true"  required="false" multiValued="true"  />
+    <field name="summary"         type="text"      indexed="true"  stored="false" required="true"  multiValued="false" />
+    <field name="releaseDate"     type="pdate"     indexed="true"  stored="false" required="false" multiValued="false" />
+    <field name="_text_"          type="text"      indexed="true"  stored="false" required="false" multiValued="true"  />
+    <uniqueKey>id</uniqueKey>
+
+    <copyField source="title" dest="_text_"/>
+    <copyField source="team" dest="_text_"/>
+    <copyField source="genre" dest="_text_"/>
+    <copyField source="summary" dest="_text_"/>
+
+    <fieldType name="string"  class="solr.StrField"         docValues="true"/>
+    <fieldType name="pdouble" class="solr.DoublePointField" docValues="true"/>
+    <fieldType name="pdate"   class="solr.DatePointField"   docValues="true"/>
+    <fieldType name="plong"   class="solr.LongPointField"   docValues="true"/>
+
+    <!-- A text field with defaults appropriate for English: it tokenizes with StandardTokenizer,
+         removes English stop words (stopwords.txt), down cases, protects words from protwords.txt, and
+         finally applies Porter's stemming.  The query time analyzer also applies synonyms from synonyms.txt. -->
+    <fieldType name="text" class="solr.TextField" positionIncrementGap="100">
+        <analyzer type="index">
+            <tokenizer name="standard"/>
+            <filter name="stop" ignoreCase="true" words="stopwords.txt"
+            />
+            <filter name="lowercase"/>
+            <filter name="englishPossessive"/>
+            <filter name="keywordMarker" protected="protwords.txt"/>
+            <filter name="porterStem"/>
+        </analyzer>
+        <analyzer type="query">
+            <tokenizer name="standard"/>
+            <filter name="synonymGraph" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
+            <filter name="stop" ignoreCase="true" words="stopwords.txt" />
+            <filter name="lowercase"/>
+            <filter name="englishPossessive"/>
+            <filter name="keywordMarker" protected="protwords.txt"/>
+            <filter name="porterStem"/>
+        </analyzer>
+    </fieldType>
+
+    <!-- SortableTextField generaly functions exactly like TextField,
+         except that it supports, and by default uses, docValues for sorting (or faceting)
+         on the first 1024 characters of the original field values (which is configurable).
+
+         This makes it a bit more useful then TextField in many situations, but the trade-off
+         is that it takes up more space on disk; which is why it's not used in place of TextField
+         for every fieldType in this _default schema.
+    -->
+    <fieldType name="text_sort" class="solr.SortableTextField" positionIncrementGap="100">
+        <analyzer type="index">
+            <tokenizer name="standard"/>
+            <filter name="stop" ignoreCase="true" words="stopwords.txt"/>
+            <filter name="lowercase"/>
+            <filter name="englishPossessive"/>
+            <filter name="keywordMarker" protected="protwords.txt"/>
+            <filter name="porterStem"/>
+        </analyzer>
+        <analyzer type="query">
+            <tokenizer name="standard"/>
+            <filter name="synonymGraph" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
+            <filter name="stop" ignoreCase="true" words="stopwords.txt"/>
+            <filter name="lowercase"/>
+            <filter name="englishPossessive"/>
+            <filter name="keywordMarker" protected="protwords.txt"/>
+            <filter name="porterStem"/>
+        </analyzer>
+    </fieldType>
+</schema>
