@@ -60,7 +60,6 @@ public class SolrConnector {
                     final var start = y +"-01-01T00:00:00Z";
                     final var end = (y+10) +"-01-01T00:00:00Z";
                     final var range = "["+ start + " TO " + end + "]";
-                    log.info(range);
                     solrQuery.addFilterQuery("releaseDate:" + range);
                 }
         );
