@@ -17,6 +17,7 @@ import site.gutschi.solrexample.model.GameRepository;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
@@ -49,7 +50,7 @@ public class GameController {
     @SuppressWarnings("SameReturnValue")
     @GetMapping("/games")
     public String showGames(@Param("query") String query, Model model) {
-        final var searchResult = solrConnector.search(query);
+        final var searchResult = solrConnector.search(Optional.ofNullable(query).orElse("*"));
         model.addAttribute("query", query);
         model.addAttribute("games", getGames(searchResult));
         return "games";
