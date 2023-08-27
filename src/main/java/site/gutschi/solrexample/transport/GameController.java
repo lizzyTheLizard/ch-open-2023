@@ -49,15 +49,15 @@ public class GameController {
 
     @SuppressWarnings("SameReturnValue")
     @GetMapping("/games")
-    public String showGames(@Param("team") String team, @Param("genre") String genre, @Param("decade") Integer decade, @Param("search") String search, Model model) {
+    public String showGames(@Param("team") String team, @Param("genre") String genre, @Param("decade") Integer decade, @Param("query") String query, Model model) {
         final var searchInput = SolrConnector.SearchInput.builder()
-                .query(Optional.ofNullable(search).orElse("*"))
+                .query(Optional.ofNullable(query).orElse("*"))
                 .team(team)
                 .genre(genre)
                 .decade(decade)
                 .build();
         final var searchResult = solrConnector.search(searchInput);
-        model.addAttribute("search", search);
+        model.addAttribute("query", query);
         model.addAttribute("team", team);
         model.addAttribute("decade", decade);
         model.addAttribute("genre", genre);

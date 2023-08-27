@@ -23,7 +23,7 @@
                     <ul class="navbar-nav me-auto mb-2 mb-md-0">
                     </ul>
                     <form action="/games" class="d-flex" method="GET">
-                        <input aria-label="Search" class="form-control me-2" id="search" name="search"
+                        <input aria-label="Search" class="form-control me-2" id="search" name="query"
                                placeholder="Search">
                         <button class="btn btn-success" type="submit">Search</button>
                     </form>
@@ -33,7 +33,7 @@
     </header>
     <main class="flex-shrink-0">
         <div class="container">
-            <h1 class="mt-5" th:text="${search == null ? 'All Games' : ('Searched by &quot;' + search + '&quot;')}">All
+            <h1 class="mt-5" th:text="${query == null ? 'All Games' : ('Searched by &quot;' + query + '&quot;')}">All
                 Games</h1>
             <div class="row" style="margin-bottom: 20px">
                 <div th:if="${decade == null}" class="col-sm-4">
